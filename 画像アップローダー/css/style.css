@@ -1,11 +1,13 @@
 body {
   margin:0;
   padding: 0;
-  line-height:150px;
+  line-height:150%;
 }
 
 #top-banner {
   width:100%;
+  margin-top:-40px;
+  margin-bottom:-10px;
 }
 
 /* header */
@@ -13,6 +15,7 @@ header {
   height:300px;
   background:#BFE9DB;
   overflow:hidden;
+  margin-bottom:40px;
 }
 
 header h1 {
@@ -78,61 +81,70 @@ header h1 a:hover {
 }
 
 /* example */
-.example {
-  position:relative;
-}
-
-.input-form h1 {
-  margin:0;
-  text-align:center;
-}
-
-.input-form {
-  width:40%;
-  height:600px;
-  border-radius:30px;
-  padding:0 15px;
+#login-form, #signup-form {
+  width:30%;
+  padding:20px;
   margin:0 auto;
-  position:absolute;
-  top:100px;
-  left:400px;
-  /* background:#D5EEFF; */
+  border:5px solid #f6f5f5;
+  line-height:200%;
 }
 
-#login{
-  background:#D5EEFF;
-  height:500px;
+h1{ 
+  color: #545454;
+  font-size: 20px;
+  text-align:center;
+  margin-bottom:30px;
 }
 
-#signup {
-  background:#FFB2AE;
+form {
+  overflow:hidden;
 }
 
-input {
-  display:block;
-  margin-top:20px;
-  margin-bottom:20px;
+input[type="text"]{
+  color: #545454;
+  height: 60px;
+  width: 100%;
+  padding: 5px 10px;
+  font-size: 16px;
+  display: block;
+  margin-bottom: 30px;
+  box-sizing: border-box;
+}
+input[type="password"]{
+  color: #545454;
+  height: 60px;
+  width: 100%;
+  padding: 5px 10px;
+  font-size: 16px;
+  display: block;
+  margin-bottom: 30px;
+  box-sizing: border-box;
+}
+input[type="submit"]{
+  border: none;
+  padding: 15px 30px;
+  margin-bottom: 15px;
+  background: #3d3938;
+  color: white;
+  float: right;
+}
+input[type="submit"]:hover{
+  background: #111;
+  cursor: pointer;
+}
+a{
+  color: #545454;
+  display: block;
+}
+a:hover{
+  text-decoration: none;
+}
+.err_msg{
+  color: #ff4d4b;
 }
 
-input.input-style {
-  width:500px;
-  height:50px;
-  border:none;
-  font-size:20px;
-  padding:10px;
-  margin-left: auto;
-  margin-right: auto;
-  background:#f6f5f5;
-}
-
-#input-submit{
-  padding:10px 15px;
-  border:none;
-  font-size:18px;
-  background:#333;
-  color:white;
-  float:right;
-  margin-right:30px;
+#img-msg {
+  text-align:center;
 }
 
 /* footer */
@@ -140,20 +152,21 @@ input.input-style {
 footer {
   font-size:12px;
   padding:15px 30px;
-  margin-top: -100px;
+  /* margin-top: 100px; */
   text-align:center;
   background:#AE9890;
   color:white;
 }
 
+#fotter2 {
+  margin-top:40px;
+}
+
 footer a {
   color:white;
+  display:none;
 }
 
-.example img {
-  width:100%;
-}
-
-.error_msg {
-  color:red;
+.img_area, .img_area img {
+  width: 100%;
 }

@@ -1,60 +1,98 @@
 <?php
-error_reporting(E_ALL);
-ini_set('dispkay_errors','On');
-
-if(!empty($_POST)) {
-
-  // エラーメッセージを定義
-  define ('MSG01','入力必須です。');
-  define ('MSG02','E-mailの表記でご記入ください。');
-  define ('MSG03','パスワードが合っていません。');
-  define ('MSG04','半角英数字のみでご記入ください。');
-  define ('MSG05','6文字以上でご記入ください。');
-
-  // エラーメッセージ変数を宣言
+ 
+error_reporting(E_ALL); //E_STRICTレベル以外のエラーを報告する
+ini_set('display_errors','On'); //画面にエラーを表示させるか
+ 
+//1.post送信されていた場合
+if(!empty($_POST)){
+ 
+  //エラーメッセージを定数に設定
+  define('MSG01','入力必須です');
+  define('MSG02', 'Emailの形式で入力してください');
+  define('MSG03','パスワード（再入力）が合っていません');
+  define('MSG04','半角英数字のみご利用いただけます');
+  define('MSG05','6文字以上で入力してください');
+ 
+  //配列$err_msgを用意
   $err_msg = array();
-
-  if(empty($_POST['email'])) {
+ 
+  //2.フォームが入力されていない場合
+  if(empty($_POST['email'])){
+ 
     $err_msg['email'] = MSG01;
+ 
   }
-  if(empty($_POST['password'])) {
-    $err_msg['password'] = MSG01;
+  if(empty($_POST['pass'])){
+ 
+    $err_msg['pass'] = MSG01;
+ 
   }
-  if(empty($_POST['password_retry'])) {
-    $err_msg['password_retry'] = MSG01;
+  if(empty($_POST['pass_retype'])){
+ 
+    $err_msg['pass_retype'] = MSG01;
+ 
   }
-
-  if(empty($err_msg)) {
-
-    // 値を変数に格納
+ 
+  if(empty($err_msg)){
+ 
+    //変数にユーザー情報を代入
     $email = $_POST['email'];
-    $pass = $_POST['password'];
-    $pass_rty = $_POST['password_retry'];
-
-    // E-mail表記であるかをチェック
-    if(!preg_match("/^([a-zA-Z0-9])+([a-zA-Z0-9\._-])*@([a-zA-Z0-9_-])+([a-zA-Z0-9\._-]+)+$/",$email)) {
+    $pass = $_POST['pass'];
+    $pass_re = $_POST['pass_retype'];
+ 
+    //3.emailの形式でない場合
+    if(!preg_match("/^([a-zA-Z0-9])+([a-zA-Z0-9\._-])*@([a-zA-Z0-9_-])+([a-zA-Z0-9\._-]+)+$/", $email)){
       $err_msg['email'] = MSG02;
     }
-
-    // パスワードチェック
-    if($pass !== $pass_rty) {
-      $err_msg['password'] = MSG03;
-    } else if(!preg_match('/^[a-zA-Z0-9]+$/',$pass)) {
-      $err_msg['password'] = MSG04;
-    } else if(mb_strlen($pass) < 6) {
-      $err_msg['password'] = MSG05;
+ 
+    //4.パスワードとパスワード再入力が合っていない場合
+    if($pass !== $pass_re){
+      $err_msg['pass'] = MSG03;
     }
-
+ 
+    if(empty($err_msg)){
+ 
+      //5.パスワードとパスワード再入力が半角英数字でない場合
+      if(!preg_match("/^[a-zA-Z0-9]+$/", $pass)){
+        $err_msg['pass'] = MSG04;
+ 
+      }elseif(mb_strlen($pass) < 6){
+      //6.パスワードとパスワード再入力が6文字以上でない場合
+ 
+        $err_msg['pass'] = MSG05;
+      }
+ 
+      if(empty($err_msg)){
+ 
+        //DBへの接続準備
+        $dsn = 'mysql:dbname=php_sample01;host=localhost;charset=utf8';
+        $user = 'root';
+        $password = 'root';
+        $options = array(
+                // SQL実行失敗時に例外をスロー
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                // デフォルトフェッチモードを連想配列形式に設定
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true,
+            );
+ 
+        // PDOオブジェクト生成（DBへ接続）
+        $dbh = new PDO($dsn, $user, $password, $options);
+ 
+        //SQL文（クエリー作成）
+        $stmt = $dbh->prepare('INSERT INTO users (email,pass,login_time) VALUES (:email,:pass,:login_time)');
+ 
+        //プレースホルダに値をセットし、SQL文を実行
+        $stmt->execute(array(':email' => $email, ':pass' => $pass, ':login_time' => date('Y-m-d H:i:s')));
+ 
+        header("Location:mypage.php"); //マイページへ
+      }
+ 
+    }
   }
-
-  if(empty($err_msg)) {
-    header('Location:main.php');
-
-  }
-
 }
-
- ?>
+ 
+?>
 
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
@@ -78,26 +116,24 @@ if(!empty($_POST)) {
       </div>
     </header>
 
-    <div class="example">
-      <img id="top-banner" src="../img/画像アップローダー.jpeg" alt="">
-      <div class="input-form" id="signup">
-        <h1>SIGN UP</h1>
+    <div id='signup-form'>
+      <h1>ユーザー登録</h1>
         <form method="post">
-          <p class="error_msg"><?php if(!empty($err_msg['email'])) echo $err_msg['email']; ?></p>
-          <input class="input-style" type="text" placeholder="E-mail" name="email" value="<?php if(!empty($_POST['email'])) echo $_POST['email']; ?>">
-          <p class="error_msg"><?php if(!empty($err_msg['password'])) echo $err_msg['password']; ?></p>
-          <input class="input-style" type="text" placeholder="password" name="password" value="<?php if(!empty($_POST['password'])) echo $_POST['password']; ?>">
-          <p class="error_msg"><?php if(!empty($err_msg['$pass_rty'])) echo $err_msg['$pass_rty']; ?></p>
-          <input class="input-style" type="text" placeholder="password(再入力)" name="password_retry" value="<?php if(!empty($_POST['password_retry'])) echo $_POST['password_retry']; ?>">
-          <input id="input-submit" type="submit" name="submit" value="sign up">
+          <span class="err_msg"><?php if(!empty($err_msg['email'])) echo $err_msg['email']; ?></span>
+          <input type="text" name="email" placeholder="email" value="<?php if(!empty($_POST['email'])) echo $_POST['email'];?>">
+  
+          <span class="err_msg"><?php if(!empty($err_msg['pass'])) echo $err_msg['pass']; ?></span>
+          <input type="password" name="pass" placeholder="パスワード" value="<?php if(!empty($_POST['pass'])) echo $_POST['pass'];?>">
+  
+          <span class="err_msg"><?php if(!empty($err_msg['pass_retype'])) echo $err_msg['pass_retype']; ?></span>
+          <input type="password" name="pass_retype" placeholder="パスワード（再入力）" value="<?php if(!empty($_POST['pass_retype'])) echo $_POST['pass_retype'];?>">
+  
+          <input type="submit" value="送信">
         </form>
-
-      </div>
-    </div>
-
-
-
-    <footer>
+        
+     </div>
+    
+    <footer id="fotter2">
       Copyright <a href="../index.html">画像アップローダー</a>. All Rights Reserved.
     </footer>
 
