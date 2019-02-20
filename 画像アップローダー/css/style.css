@@ -1,0 +1,159 @@
+body {
+  margin:0;
+  padding: 0;
+  line-height:150px;
+}
+
+#top-banner {
+  width:100%;
+}
+
+/* header */
+header {
+  height:300px;
+  background:#BFE9DB;
+  overflow:hidden;
+}
+
+header h1 {
+  width:200px;
+  height:200px;
+  border-radius:100px;
+  -webkit-border-radius:100%;
+  -moz-border-radius:100%;
+  padding:15px;
+  margin:15px;
+  text-align:center;
+  float:left;
+  font-size:20px;
+  font-family:'Montserrat',sans-serif;
+  line-height:200px;
+  background:#F7B46B;
+}
+
+header h1 a {
+  color:white;
+  text-decoration: none;
+}
+
+header h1 a:hover {
+  text-decoration:underline;
+}
+
+/* top-nav */
+#top-nav {
+  width:700px;
+  height:300px;
+  position:relative;
+  float:right;
+}
+
+#top-nav ul {
+  width:800px;
+  height:40px;
+  position:absolute;
+  bottom:70px;
+  left:0;
+  font-size:20px;
+  list-style:none;
+}
+
+#top-nav ul li {
+  float:left;
+}
+
+#top-nav a {
+  padding:0 30px;
+  color:#333;
+  text-decoration:none;
+}
+
+#top-nav a:hover {
+  text-decoration:underline;
+}
+
+.site-width {
+  width:980px;
+  margin:0 auto;
+}
+
+/* example */
+.example {
+  position:relative;
+}
+
+.input-form h1 {
+  margin:0;
+  text-align:center;
+}
+
+.input-form {
+  width:40%;
+  height:600px;
+  border-radius:30px;
+  padding:0 15px;
+  margin:0 auto;
+  position:absolute;
+  top:100px;
+  left:400px;
+  /* background:#D5EEFF; */
+}
+
+#login{
+  background:#D5EEFF;
+  height:500px;
+}
+
+#signup {
+  background:#FFB2AE;
+}
+
+input {
+  display:block;
+  margin-top:20px;
+  margin-bottom:20px;
+}
+
+input.input-style {
+  width:500px;
+  height:50px;
+  border:none;
+  font-size:20px;
+  padding:10px;
+  margin-left: auto;
+  margin-right: auto;
+  background:#f6f5f5;
+}
+
+#input-submit{
+  padding:10px 15px;
+  border:none;
+  font-size:18px;
+  background:#333;
+  color:white;
+  float:right;
+  margin-right:30px;
+}
+
+/* footer */
+
+footer {
+  font-size:12px;
+  padding:15px 30px;
+  margin-top: -100px;
+  text-align:center;
+  background:#AE9890;
+  color:white;
+}
+
+footer a {
+  color:white;
+}
+
+.example img {
+  width:100%;
+}
+
+.error_msg {
+  color:red;
+}
